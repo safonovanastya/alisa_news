@@ -3,8 +3,10 @@
 from __future__ import unicode_literals
 
 # Импортируем модули для работы с JSON и логами.
+import requests
 import json
 import logging
+from random import randint
 
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
@@ -57,23 +59,30 @@ def handle_dialog(req, res):
             ]
         }
 
-        res['response']['text'] = 'Привет! Купи слона!'
+        res['response']['text'] = 'Привет! Хочешь свежую новость? Выбери категорию: здоровье, спорт, бизнес, технологии, наука.'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Обрабатываем ответ пользователя.
     if req['request']['original_utterance'].lower() in [
-        'ладно',
-        'куплю',
-        'покупаю',
-        'хорошо',
+        'спорт',
+        'бизнес',
+        'технологии',
+        'здоровье',
+        'наука',
     ]:
         # Пользователь согласился, прощаемся.
-        res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
+        url = "http://newsapi.org/v2/top-headlines?country=ru&category=sports&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
+
+        response = requests.get(url)
+        todos = json.loads(response.text)
+        title = response.json()['articles'][number]['title']
+        link = response.json()['articles'][number]['url']
+        res['response']['text'] = 'Вот такая есть новость: %title . Подробнее здесь: %link'
         return
 
     # Если нет, то убеждаем его купить слона!
-    res['response']['text'] = 'Все говорят "%s", а ты купи слона!' % (
+    res['response']['text'] = 'Все говорят "%s", а ты новости почитай!' % (
         req['request']['original_utterance']
     )
     res['response']['buttons'] = get_suggests(user_id)
