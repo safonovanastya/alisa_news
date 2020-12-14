@@ -79,15 +79,6 @@ def handle_dialog(req, res):
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
         res['response']['text'] = 'Вот такая есть новость: ' + title 
-        res['response']['buttons'] = get_suggests(user_id)
-
-    elif req['request']['original_utterance'].lower() in [
-        'харэ',
-        'стоп',
-        'хватит',
-        'перестань',
-    ]:
-        res['response']['text'] = 'Всего доброго!'
         return
 
 
