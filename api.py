@@ -65,12 +65,15 @@ def handle_dialog(req, res):
 
     # Обрабатываем ответ пользователя.
     if req['request']['original_utterance'].lower() in [
-        'хочу',
-        'давай',
-        'ага',
-        'хорошо',
+        'спорт',
+        'бизнес',
+        'технологии',
+        'здоровье',
+        'наука',
     ]:
-        url = "http://newsapi.org/v2/top-headlines?country=ru&category=sports&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
+        q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
+
+        url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[s] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
         response = requests.get(url)
         number = randint(0, len(response.json()['articles']))
         title = response.json()['articles'][number]['title']
@@ -80,7 +83,7 @@ def handle_dialog(req, res):
         return
 
     # Если нет, то убеждаем его купить слона!
-    res['response']['text'] = 'Все говорят "%s", а ты купи слона!' % (
+    res['response']['text'] = 'Все говорят "%s", а ты лучше назови категорию!' % (
         req['request']['original_utterance']
     )
     res['response']['buttons'] = get_suggests(user_id)
