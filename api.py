@@ -76,7 +76,7 @@ def handle_dialog(req, res):
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
         # Пользователь согласился, прощаемся.
-        res['response']['text'] = 'Вот такая есть новость "%title"'
+        res['response']['text'] = 'Вот такая есть новость: ' + title
         return
 
     # Если нет, то убеждаем его купить слона!
