@@ -53,13 +53,13 @@ def handle_dialog(req, res):
 
         sessionStorage[user_id] = {
             'suggests': [
-                "хочу",
-                "давай",
-                "ага",
+                "спорт",
+                "бизнес",
+                "технологии",
             ]
         }
 
-        res['response']['text'] = 'Привет! Хочешь узнать новость?'
+        res['response']['text'] = 'Привет! Хочешь узнать новость? Назови категорию'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
@@ -83,7 +83,7 @@ def handle_dialog(req, res):
         return
 
     # Если нет, то убеждаем его купить слона!
-    res['response']['text'] = 'Все говорят "%s", а ты лучше назови категорию!' % (
+    res['response']['text'] = 'Все говорят ' + s + ', а ты лучше назови категорию!' % (
         req['request']['original_utterance']
     )
     res['response']['buttons'] = get_suggests(user_id)
