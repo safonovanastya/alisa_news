@@ -78,9 +78,7 @@ def handle_dialog(req, res):
         number = randint(0, len(response.json()['articles']))
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
-        res['response']['text'] = 'Вот такая есть новость: ' + title % (
-        req['request']['original_utterance']
-        )
+        res['response']['text'] = 'Вот такая есть новость: ' + title 
         res['response']['buttons'] = get_suggests(user_id)
 
 
