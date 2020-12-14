@@ -78,7 +78,7 @@ def handle_dialog(req, res):
         todos = json.loads(response.text)
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
-        res['response']['text'] = 'Вот такая есть новость: %title . Подробнее здесь: %link'
+        res['response']['text'] = 'Вот такая есть новость:' + title + ' Подробнее здесь: ' + link
         return
 
     # Если нет, то убеждаем его купить слона!
