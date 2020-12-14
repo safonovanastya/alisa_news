@@ -1,7 +1,7 @@
 
-> from alice_scripts import Skill, request, say, suggest
-> skill = Skill(__name__)
-
+from alice_scripts import Skill, request, say, suggest
+skill = Skill(__name__)
+FLASK_APP=hello.py flask run --with-threads
 
 
 @skill.script
