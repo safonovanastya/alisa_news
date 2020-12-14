@@ -5,6 +5,8 @@ from __future__ import unicode_literals
 # Импортируем модули для работы с JSON и логами.
 import json
 import logging
+import requests
+from random import randint
 
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
@@ -51,25 +53,30 @@ def handle_dialog(req, res):
 
         sessionStorage[user_id] = {
             'suggests': [
-                "Не хочу.",
-                "Не буду.",
-                "Отстань!",
+                "хочу",
+                "давай",
+                "ага",
             ]
         }
 
-        res['response']['text'] = 'Привет! Купи слона!'
+        res['response']['text'] = 'Привет! Хочешь узнать новость?'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Обрабатываем ответ пользователя.
     if req['request']['original_utterance'].lower() in [
-        'ладно',
-        'куплю',
-        'покупаю',
+        'хочу',
+        'давай',
+        'ага',
         'хорошо',
     ]:
+        url = "http://newsapi.org/v2/top-headlines?country=ru&category=sports&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
+        response = requests.get(url)
+        number = randint(0, len(response.json()['articles']))
+        title = response.json()['articles'][number]['title']
+        link = response.json()['articles'][number]['url']
         # Пользователь согласился, прощаемся.
-        res['response']['text'] = 'Слона можно найти на Яндекс.Маркете!'
+        res['response']['text'] = 'Вот такая есть новость "%title"'
         return
 
     # Если нет, то убеждаем его купить слона!
