@@ -97,19 +97,19 @@ def handle_dialog(req, res):
         res = {
             "text": 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ': ' + title + '\n\n Хочешь ещё новость? Выбери категорию!',
             "card": {
-            "type": "BigImage",
-            "image_id": ya_image_id,
-            "button": {
-                "text": "Подробнее",
-                "url": link,
-                "payload": {}
-            }
+                "type": "BigImage",
+                "image_id": ya_image_id,
+                "button": {
+                    "text": "Подробнее",
+                    "url": link,
+                    "payload": {}
+                }
             },
             "buttons": get_suggests(user_id),
             "end_session": false
-        },
-        "version": "1.0"
-        }
+            },
+            "version": "1.0"
+            }
         return
 
 
