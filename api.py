@@ -56,6 +56,8 @@ def handle_dialog(req, res):
                 "спорт",
                 "бизнес",
                 "технологии",
+                "наука",
+                "здоровье",
             ]
         }
 
@@ -72,13 +74,15 @@ def handle_dialog(req, res):
         'наука',
     ]:
         q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
-
         url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
         response = requests.get(url)
         number = randint(0, len(response.json()['articles']))
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ': ' + title 
+        res['response']['text'] = 'Хочешь ещё новость? Выбери категорию!'
+        res['response']['buttons'] = get_suggests(user_id)
+
         return
 
 
