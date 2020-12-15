@@ -12,7 +12,6 @@ from random import randint
 from flask import Flask, request
 app = Flask(__name__)
 
-
 logging.basicConfig(level=logging.DEBUG)
 
 # Хранилище данных о сессиях.
@@ -93,8 +92,8 @@ def handle_dialog(req, res):
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
         image = '\'' + response.json()['articles'][number]['urlToImage'] + '\''
+        image_id = upload_yandex(image)
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ': ' + title + '\n\n Хочешь ещё новость? Выбери категорию!'
-        res['response']['card']['image_id'] = upload_yandex(image)
         res['response']['buttons'] = get_suggests(user_id)
 
         return
