@@ -43,6 +43,19 @@ def main():
         indent=2
     )
 
+def upload_yandex(url):
+    url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'
+
+    payload = {
+        "url": str(url)
+    }
+    headers = {"Authorization": "OAuth your_token",
+               "Content-Type": "application/json; charset=utf-8"}
+    r = requests.post(url, data=json.dumps(payload), headers=headers)
+
+    data = json.loads(r.content)
+    return data["image"]["id"]
+
 # Функция для непосредственной обработки диалога.
 def handle_dialog(req, res):
     user_id = req['session']['user_id']
@@ -79,7 +92,9 @@ def handle_dialog(req, res):
         number = randint(0, len(response.json()['articles']))
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
+        image = response.json()['articles'][number]['urlToImage']
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ': ' + title + '\n\n Хочешь ещё новость? Выбери категорию!'
+        res['response']['card']['image_id'] = upload_yandex(image)
         res['response']['buttons'] = get_suggests(user_id)
 
         return
