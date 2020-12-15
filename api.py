@@ -49,7 +49,7 @@ def upload_yandex(url):
     payload = {
         "url": str(url)
     }
-    headers = {"Authorization": "OAuth your_token",
+    headers = {"Authorization": "AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc",
                "Content-Type": "application/json; charset=utf-8"}
     r = requests.post(url, data=json.dumps(payload), headers=headers)
 
