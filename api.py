@@ -92,9 +92,9 @@ def handle_dialog(req, res):
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
         image = response.json()['articles'][number]['urlToImage']
-        image_id = upload_yandex(image)
+        ya_image_id = upload_yandex(image)
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ': ' + title + '\n\n Хочешь ещё новость? Выбери категорию!'
-        res['response']['card']['image_id'] = image_id
+        res['response']['card']['image_id'] = ya_image_id
         res['response']['buttons'] = get_suggests(user_id)
 
         return
