@@ -48,7 +48,7 @@ def upload_yandex(img):
     payload = {
         "url": img 
     }
-    headers = {"Authorization": "AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc",
+    headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc",
                "Content-Type": "application/json; charset=utf-8"}
     r = requests.post(url, data=json.dumps(payload), headers=headers)
 
@@ -91,7 +91,7 @@ def handle_dialog(req, res):
         number = randint(0, len(response.json()['articles']))
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
-        image = '\'' + response.json()['articles'][number]['urlToImage'] + '\''
+        image = response.json()['articles'][number]['urlToImage']
         image_id = upload_yandex(image)
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ': ' + title + '\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['buttons'] = get_suggests(user_id)
