@@ -43,11 +43,11 @@ def main():
         indent=2
     )
 
-def upload_yandex(url):
+def upload_yandex(img):
     url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'
 
     payload = {
-        "url": str(url)
+        "url": str(img)
     }
     headers = {"Authorization": "AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc",
                "Content-Type": "application/json; charset=utf-8"}
