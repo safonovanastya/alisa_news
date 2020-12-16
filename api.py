@@ -97,6 +97,7 @@ def handle_dialog(req, res):
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
         res['response']['buttons'] = get_suggests(user_id)
+        deleteAllImage()
         return
 
 
@@ -118,5 +119,22 @@ def get_suggests(user_id):
     # Убираем первую подсказку, чтобы подсказки менялись каждый раз.
     session['suggests'] = session['suggests'][1:]
     sessionStorage[user_id] = session
-
     return suggests
+
+def deleteAllImage(self):
+    success = 0
+    fail = 0
+    images = self.getLoadedImages()
+    for image in images:
+        image_id = image['id']
+        if image_id:
+            if self.deleteImage(image_id):
+                success+=1
+            else:
+                fail += 1
+        else:
+            fail += 1
+
+    return {'success':success,'fail':fail}
+
+
