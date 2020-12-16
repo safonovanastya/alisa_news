@@ -122,7 +122,7 @@ def get_suggests(user_id):
     return suggests
 
 def deleteImage(self, img_id):
-    path = 'skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images/{img_id}'.format(skills_id=self.skills,img_id = img_id)
+    path = 'skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images/{img_id}'.format(img_id = img_id)
     result = self.SESSION.delete(url=self.API_URL+path)
     content = self.validate_api_response(result)
     if content != None:
