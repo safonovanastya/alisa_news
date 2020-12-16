@@ -94,7 +94,7 @@ def handle_dialog(req, res):
         image = response.json()['articles'][number]['urlToImage']
         ya_image_id = upload_yandex(image)
 
-        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ': ' + title + '\n\n Хочешь ещё новость? Выбери категорию!'
+        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
         res['response']['buttons'] = get_suggests(user_id)
         return
