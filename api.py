@@ -97,7 +97,7 @@ def handle_dialog(req, res):
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
         res['response']['buttons'] = get_suggests(user_id)
-        deleteAllImage()
+        deleteImage(ya_image_id)
         return
 
 
@@ -121,20 +121,10 @@ def get_suggests(user_id):
     sessionStorage[user_id] = session
     return suggests
 
-def deleteAllImage(self):
-    success = 0
-    fail = 0
-    images = self.getLoadedImages()
-    for image in images:
-        image_id = image['id']
-        if image_id:
-            if self.deleteImage(image_id):
-                success+=1
-            else:
-                fail += 1
-        else:
-            fail += 1
-
-    return {'success':success,'fail':fail}
-
-
+def deleteImage(self, img_id):
+    path = 'skills/{skills_id}/images/{img_id}'.format(skills_id=self.skills,img_id = img_id)
+    result = self.SESSION.delete(url=self.API_URL+path)
+    content = self.validate_api_response(result)
+    if content != None:
+        return content['result']
+    return None
