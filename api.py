@@ -97,7 +97,6 @@ def handle_dialog(req, res):
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
         res['response']['buttons'] = get_suggests(user_id)
-        deleteImage(ya_image_id)
         return
 
 
@@ -120,24 +119,3 @@ def get_suggests(user_id):
     session['suggests'] = session['suggests'][1:]
     sessionStorage[user_id] = session
     return suggests
-
-class YandexImages(object):
-    def __init__(self):
-        self.SESSION = requests.Session()
-        #self.SESSION.headers.update(AUTH_HEADER)
-
-        self.API_VERSION = 'v1'
-        self.API_BASE_URL = 'https://dialogs.yandex.net/api/'
-	self.API_URL = self.API_BASE_URL + '/' + self.API_VERSION + '/'
-	self.skills = 'c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4'
-
-    def set_auth_token(self, token):
-        self.SESSION.headers.update(self.get_auth_header(token))
-    
-    def deleteImage(self, img_id):
-        path = 'skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images/{img_id}'.format(img_id = img_id)
-        result = self.SESSION.delete(url=self.API_URL+path)
-        content = self.validate_api_response(result)
-        if content != None:
-            return content['result']
-        return None
