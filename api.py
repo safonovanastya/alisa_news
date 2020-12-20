@@ -105,7 +105,7 @@ def handle_dialog(req, res):
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
         res['response']['buttons'] = get_suggests(user_id)
-#        deleteImage(ya_image_id)
+        deleteImage(ya_image_id)
         return
 
 
