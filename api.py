@@ -120,7 +120,7 @@ def handle_dialog(req, res):
         q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
         url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
         response = requests.get(url)
-        number = randint(0, len(response.json()['articles']))
+        number = randint(0, 19)
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
         image = response.json()['articles'][number]['urlToImage']
