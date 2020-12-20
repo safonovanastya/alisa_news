@@ -42,7 +42,7 @@ def main():
         indent=2
     )
 
-def upload_yandex(img):
+def uploadImage(img):
     url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'
 
     payload = {
@@ -55,13 +55,14 @@ def upload_yandex(img):
     data = json.loads(r.content)
     return data["image"]["id"]
 
-def deleteImage(img_id):    
+def getLoadedImages():
 
-    url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images/' + img_id
+    url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'   
     headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc"}
+    r = requests.get(url, headers=headers)
+    data = json.loads(r.content)
 
-    r = requests.delete(url, headers=headers)
-    return 
+    return data['images']
 
 def deleteAllImage():
     
@@ -110,7 +111,7 @@ def handle_dialog(req, res):
         title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
         image = response.json()['articles'][number]['urlToImage']
-        ya_image_id = upload_yandex(image)
+        ya_image_id = uploadImage(image)
 
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
