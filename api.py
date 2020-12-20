@@ -63,6 +63,15 @@ def deleteImage(img_id):
     r = requests.delete(url, headers=headers)
     return 
 
+def deleteAllImage():
+    
+    images = getLoadedImages()
+    for image in images:
+        image_id = image['id']
+        deleteImage(image_id)
+
+    return
+
 # Функция для непосредственной обработки диалога.
 def handle_dialog(req, res):
     user_id = req['session']['user_id']
@@ -93,6 +102,7 @@ def handle_dialog(req, res):
         'здоровье',
         'наука',
     ]:
+        deleteAllImage()
         q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
         url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
         response = requests.get(url)
@@ -105,7 +115,6 @@ def handle_dialog(req, res):
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
         res['response']['buttons'] = get_suggests(user_id)
-        deleteImage(ya_image_id)
         return
 
 
