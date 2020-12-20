@@ -42,6 +42,16 @@ def main():
         indent=2
     )
 
+
+def deleteImage(img_id):    
+
+    url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images/' + img_id
+    headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc"}
+
+    r = requests.delete(url, headers=headers)
+    return 
+
+
 def uploadImage(img):
     url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'
 
@@ -55,6 +65,7 @@ def uploadImage(img):
     data = json.loads(r.content)
     return data["image"]["id"]
 
+
 def getLoadedImages():
 
     url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'   
@@ -64,6 +75,7 @@ def getLoadedImages():
 
     return data['images']
 
+
 def deleteAllImage():
     
     images = getLoadedImages()
@@ -72,6 +84,7 @@ def deleteAllImage():
         deleteImage(image_id)
 
     return
+
 
 # Функция для непосредственной обработки диалога.
 def handle_dialog(req, res):
