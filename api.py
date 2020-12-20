@@ -103,7 +103,7 @@ def handle_dialog(req, res):
                 "здоровье",
             ]
         }
-
+        deleteAllImage()
         res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость!'
         res['response']['buttons'] = get_suggests(user_id)
         return
@@ -116,7 +116,6 @@ def handle_dialog(req, res):
         'здоровье',
         'наука',
     ]:
-        deleteAllImage()
         q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
         url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
         response = requests.get(url)
