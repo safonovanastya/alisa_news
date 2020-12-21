@@ -22,7 +22,6 @@ sessionStorage = {}
 
 def main():
 # Функция получает тело запроса и возвращает ответ.
-    deleteAllImage()
     logging.info('Request: %r', request.json)
 
     response = {
@@ -42,49 +41,6 @@ def main():
         ensure_ascii=False,
         indent=2
     )
-
-
-def deleteImage(img_id):    
-
-    url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images/' + img_id
-    headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc"}
-
-    r = requests.delete(url, headers=headers)
-    return 
-
-
-def uploadImage(img):
-    url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'
-
-    payload = {
-        "url": img 
-    }
-    headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc",
-               "Content-Type": "application/json; charset=utf-8"}
-    r = requests.post(url, data=json.dumps(payload), headers=headers)
-
-    data = json.loads(r.content)
-    return data["image"]["id"]
-
-
-def getLoadedImages():
-
-    url = 'https://dialogs.yandex.net/api/v1/skills/c7ab78ae-4fb6-4ea8-bed3-239fa4c140d4/images'   
-    headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc"}
-    r = requests.get(url, headers=headers)
-    data = json.loads(r.content)
-
-    return data['images']
-
-
-def deleteAllImage():
-    
-    images = getLoadedImages()
-    for image in images:
-        image_id = image['id']
-        deleteImage(image_id)
-
-    return
 
 
 # Функция для непосредственной обработки диалога.
@@ -123,11 +79,8 @@ def handle_dialog(req, res):
             number = randint(0, len(response.json()['articles']))
             title = response.json()['articles'][number]['title']
             link = response.json()['articles'][number]['url']
-            image = response.json()['articles'][number]['urlToImage']
-            ya_image_id = uploadImage(image)
 
-            res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
-            res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
+            res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Подробнее по ссылке: ' + link + '\n\n\n Хочешь ещё новость? Выбери категорию!'
             res['response']['buttons'] = get_suggests(user_id)
         else:
             res['response']['text'] = 'повторите, пожалуйста, запрос'
