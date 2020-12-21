@@ -61,7 +61,7 @@ def uploadImage(img):
         "url": img 
     }
     headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc",
-               "Content-Type": "application/json; charset=utf-8"}
+               "Content-Type": "multipart/form-data; charset=utf-8"}
     r = requests.post(url, data=json.dumps(payload), headers=headers)
 
     data = json.loads(r.content)
