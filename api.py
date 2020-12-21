@@ -82,9 +82,7 @@ def handle_dialog(req, res):
         res['response']['buttons'] = [{"title": "Подробнее", "url": link}]
         return
 
-    res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?' % (
-        req['request']['original_utterance']
-    )
+    res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?'
     res['response']['buttons'] = get_suggests(user_id)
 
 # Функция возвращает две подсказки для ответа.
