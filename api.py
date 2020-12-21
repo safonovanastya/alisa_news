@@ -8,6 +8,7 @@ import logging
 import requests
 from random import randint
 from PIL import Image
+from io import BytesIO
 
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
@@ -125,7 +126,7 @@ def handle_dialog(req, res):
             link = response.json()['articles'][number]['url']
             image = response.json()['articles'][number]['urlToImage']
             size = (128, 128)
-            img = Image.open(image)
+            img = Image.open(BytesIO(image))
             img = img.thumbnail(size)
             ya_image_id = uploadImage(img)
 
