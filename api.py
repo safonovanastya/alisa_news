@@ -59,7 +59,7 @@ def handle_dialog(req, res):
                 "здоровье",
             ]
         }
-        res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость!'
+        res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость! Если новость заинтересует -- жми "подробнее"ю'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
@@ -78,7 +78,7 @@ def handle_dialog(req, res):
         title = response.json()['articles'][number]['description']
         link = response.json()['articles'][number]['url']
 
-        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + 'Скажи "подробнее" и я переведу тебя на сайт новости. \n\n\n Хочешь ещё новость? Выбери категорию!'
+        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '\n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['buttons'] = [{"title": "Подробнее", "url": link}]
         return
 
