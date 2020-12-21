@@ -119,15 +119,18 @@ def handle_dialog(req, res):
         q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
         url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
         response = requests.get(url)
-        number = randint(0, 19)
-        title = response.json()['articles'][number]['title']
-        link = response.json()['articles'][number]['url']
-        image = response.json()['articles'][number]['urlToImage']
-        ya_image_id = uploadImage(image)
+        if response:
+            number = randint(0, 19)
+            title = response.json()['articles'][number]['title']
+            link = response.json()['articles'][number]['url']
+            image = response.json()['articles'][number]['urlToImage']
+            ya_image_id = uploadImage(image)
 
-        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
-        res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
-        res['response']['buttons'] = get_suggests(user_id)
+            res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробной информации нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
+            res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
+            res['response']['buttons'] = get_suggests(user_id)
+        else:
+            res['response']['text'] = 'повторите, пожалуйста, запрос'
         return
 
 
