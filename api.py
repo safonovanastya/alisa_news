@@ -22,6 +22,7 @@ sessionStorage = {}
 
 def main():
 # Функция получает тело запроса и возвращает ответ.
+    deleteAllImage()
     logging.info('Request: %r', request.json)
 
     response = {
@@ -103,7 +104,6 @@ def handle_dialog(req, res):
                 "здоровье",
             ]
         }
-        deleteAllImage()
         res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость!'
         res['response']['buttons'] = get_suggests(user_id)
         return
