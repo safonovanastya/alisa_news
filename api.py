@@ -79,6 +79,8 @@ def handle_dialog(req, res):
         title = response.json()['articles'][number]['description']
         if re.search('...', title) is not None:
             title = re.sub(r'\..*', '.', title)
+        if re.match('^$', title) is not None:
+            title = response.json()['articles'][number]['title']
         link = response.json()['articles'][number]['url']
 
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '\n\n\n Хочешь ещё новость? Выбери категорию!'
