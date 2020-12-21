@@ -79,7 +79,7 @@ def handle_dialog(req, res):
         link = response.json()['articles'][number]['url']
 
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '\n\n\n Хочешь ещё новость? Выбери категорию!'
-        res['response']['buttons'] = [{"title": "Подробнее", "url": link}, {title: "спорт"}, {title: "здоровье"}, {title: "технологии"}, {title: "бизнес"}, {title: "наука"}]
+        res['response']['buttons'] = [{"title": "Подробнее", "url": link}, {title: "спорт", 'hide': True}, {title: "здоровье", 'hide': True}, {title: "технологии", 'hide': True}, {title: "бизнес", 'hide': True}, {title: "наука", 'hide': True}]
         return
 
     res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?' % (
@@ -91,7 +91,7 @@ def handle_dialog(req, res):
 def get_suggests(user_id):
     session = sessionStorage[user_id]
     suggests = [
-        {'title': suggest, hide: 'True'}
+        {'title': suggest, 'hide': True}
         for suggest in session['suggests'][:5]
     ]
     return suggests
