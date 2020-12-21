@@ -7,6 +7,7 @@ import json
 import logging
 import requests
 from random import randint
+import re
 
 # Импортируем подмодули Flask для запуска веб-сервиса.
 from flask import Flask, request
@@ -76,6 +77,8 @@ def handle_dialog(req, res):
         response = requests.get(url)
         number = randint(0, len(response.json()['articles']))
         title = response.json()['articles'][number]['description']
+        if re.search(r'\.\.\.', title) is None:
+            title = re.sub(r'\..*', '.', title)
         link = response.json()['articles'][number]['url']
 
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '\n\n\n Хочешь ещё новость? Выбери категорию!'
