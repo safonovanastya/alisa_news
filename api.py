@@ -44,13 +44,23 @@ def main():
 
 # Функция для непосредственной обработки диалога.
 def handle_dialog(req, res):
-    user_id = req['session']['user_id']
+    user_id = req['session']['application']['application_id']
+
+        sessionStorage[user_id] = {
+            'suggests': [
+                "спорт",
+                "бизнес",
+                "технологии",
+                "наука",
+                "здоровье",
+            ]
+        }
 
     if req['session']['new']:
         # Это новый пользователь.
         # Инициализируем сессию и поприветствуем его.
         res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость! Если новость заинтересует - жми "подробнее"'
-        res['response']['buttons'] = [{title: "спорт"}, {title: "здоровье"}, {title: "технологии"}, {title: "бизнес"}, {title: "наука"}]
+        res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Обрабатываем ответ пользователя.
@@ -75,4 +85,13 @@ def handle_dialog(req, res):
     res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?' % (
         req['request']['original_utterance']
     )
-    res['response']['buttons'] = [{title: "спорт"}, {title: "здоровье"}, {title: "технологии"}, {title: "бизнес"}, {title: "наука"}]
+    res['response']['buttons'] = get_suggests(user_id)
+
+# Функция возвращает две подсказки для ответа.
+def get_suggests(user_id):
+    session = sessionStorage[user_id]
+    suggests = [
+        {'title': suggest, 'hide': false}
+        for suggest in session['suggests'][:5]
+    ]
+    return suggests
