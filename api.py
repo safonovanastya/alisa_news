@@ -124,9 +124,9 @@ def handle_dialog(req, res):
             number = randint(0, len(response.json()['articles']))
             title = response.json()['articles'][number]['title']
             link = response.json()['articles'][number]['url']
-            image = response.json()['articles'][number]['urlToImage']
+            image = requests.get(response.json()['articles'][number]['urlToImage'])
             size = (128, 128)
-            img = Image.open(BytesIO(image))
+            img = Image.open(BytesIO(image.content))
             img = img.thumbnail(size)
             ya_image_id = uploadImage(img)
 
