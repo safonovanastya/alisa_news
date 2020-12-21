@@ -61,7 +61,7 @@ def uploadImage(img):
         "url": img 
     }
     headers = {"Authorization": "OAuth AgAAAAAFVw__AAT7o0bK8BXYR0elqUK5b9JzBUc",
-               "Content-Type": "multipart/form-data; charset=utf-8"}
+               "Content-Type": "application/json; charset=utf-8"}
     r = requests.post(url, data=json.dumps(payload), headers=headers)
 
     data = json.loads(r.content)
@@ -124,11 +124,8 @@ def handle_dialog(req, res):
             number = randint(0, len(response.json()['articles']))
             title = response.json()['articles'][number]['title']
             link = response.json()['articles'][number]['url']
-            image = requests.get(response.json()['articles'][number]['urlToImage'])
-            size = (128, 128)
-            img = Image.open(BytesIO(image.content))
-            img = img.thumbnail(size)
-            ya_image_id = uploadImage(img)
+            image = response.json()['articles'][number]['urlToImage']
+            ya_image_id = uploadImage(image)
 
             res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n' + title + '\n\n Для подробностей нажми на картинку. \n\n\n Хочешь ещё новость? Выбери категорию!'
             res['response']['card'] = {'type' : 'BigImage', 'image_id' : ya_image_id, 'button' : {'text' : 'Подробнее', 'url' : link}}
