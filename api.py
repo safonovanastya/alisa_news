@@ -49,18 +49,8 @@ def handle_dialog(req, res):
     if req['session']['new']:
         # Это новый пользователь.
         # Инициализируем сессию и поприветствуем его.
-
-        sessionStorage[user_id] = {
-            'suggests': [
-                "спорт",
-                "бизнес",
-                "технологии",
-                "наука",
-                "здоровье",
-            ]
-        }
         res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость! Если новость заинтересует -- жми "подробнее"ю'
-        res['response']['buttons'] = get_suggests(user_id)
+        res['response']['buttons'] = [{title: "спорт"}, {title: "здоровье"}, {title: "технологии"}, {title: "бизнес"}, {title: "наука"}]
         return
 
     # Обрабатываем ответ пользователя.
@@ -85,15 +75,4 @@ def handle_dialog(req, res):
     res['response']['text'] = 'Все говорят "%s", а ты лучше назови категорию!' % (
         req['request']['original_utterance']
     )
-    res['response']['buttons'] = get_suggests(user_id)
-
-# Функция возвращает две подсказки для ответа.
-def get_suggests(user_id):
-    session = sessionStorage[user_id]
-
-    # Выбираем две первые подсказки из массива.
-    suggests = [
-        {'title': suggest, 'hide': True}
-        for suggest in session['suggests'][:5]
-    ]
-    return suggests
+    res['response']['buttons'] = [{title: "спорт"}, {title: "здоровье"}, {title: "технологии"}, {title: "бизнес"}, {title: "наука"}]
