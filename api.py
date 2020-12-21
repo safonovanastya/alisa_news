@@ -44,9 +44,8 @@ def main():
 
 # Функция для непосредственной обработки диалога.
 def handle_dialog(req, res):
-    console.log(req['session']['application']['application_id'])
     user_id = req['session']['application']['application_id']
-
+    if req['session']['new']:
         sessionStorage[user_id] = {
             'suggests': [
                 "спорт",
