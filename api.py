@@ -44,6 +44,7 @@ def main():
 
 # Функция для непосредственной обработки диалога.
 def handle_dialog(req, res):
+    console.log(req['session']['application']['application_id'])
     user_id = req['session']['application']['application_id']
 
         sessionStorage[user_id] = {
