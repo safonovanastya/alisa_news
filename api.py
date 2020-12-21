@@ -69,7 +69,7 @@ def handle_dialog(req, res):
         link = response.json()['articles'][number]['url']
 
         res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '\n\n\n Хочешь ещё новость? Выбери категорию!'
-        res['response']['buttons'] = [{"title": "Подробнее", "url": link}, {title: "спорт"}, {title: "здоровье"}, {title: "технологии"}, {title: "бизнес"}, {title: "наука"}]]
+        res['response']['buttons'] = [{"title": "Подробнее", "url": link}, {title: "спорт"}, {title: "здоровье"}, {title: "технологии"}, {title: "бизнес"}, {title: "наука"}]
         return
 
     res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?' % (
