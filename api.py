@@ -64,7 +64,7 @@ def handle_dialog(req, res):
         res['response']['buttons'] = get_suggests(user_id)
         return
 
-    if req['request']['original_utterance'].lower() in ['помощь', 'что ты умеешь']:
+    if req['request']['original_utterance'].lower() in ['помощь', 'что ты умеешь', 'что ты можешь', 'что ты умеешь?', 'что ты можешь?']:
         # Это новый пользователь.
         # Инициализируем сессию и поприветствуем его.
         res['response']['text'] = 'Я расскажу тебе свежую новость, нужно только выбрать одну из категорий: спорт, наука, бизнес, технологии, здоровье'
