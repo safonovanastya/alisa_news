@@ -84,7 +84,7 @@ def handle_dialog(req, res):
         response = requests.get(url)
         number = randint(0, len(response.json()['articles'])-1)
         title = response.json()['articles'][number]['description']
-        if re.search('...', title) is not None:
+        if re.search(r'(\.\.\.|…)', title) is not None:
             title = re.sub(r'\..*', '.', title)
         if re.match('^$', title) is not None:
             title = response.json()['articles'][number]['title']
