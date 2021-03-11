@@ -85,17 +85,16 @@ def handle_dialog(req, res):
         number = randint(0, len(response.json()['articles'])-1)
         title = response.json()['articles'][number]['title']
         description = response.json()['articles'][number]['description']
-        author = response.json()['articles'][number]['author']
         if re.search(r'(\.\.\.|…)', description) is not None:
             description = re.sub(r'\..*', '.', description)
         if re.match('^$', title) is not None:
             title = description
         else:
-            title_split = title.split('-')
-            title = '-'.join(title_split[:-1])
+            title_split = title.split(' - ')
+            title = ' - '.join(title_split[:-1])
         link = response.json()['articles'][number]['url']
 
-        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n\n\n' + title + '\n\n\n\n\n Хочешь ещё новость? Выбери категорию!'
+        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n\n\n' + title + '.\n\n\n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['buttons'] = [{"title": "Подробнее", "url": link}]
         return
 
