@@ -83,14 +83,17 @@ def handle_dialog(req, res):
         url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
         response = requests.get(url)
         number = randint(0, len(response.json()['articles'])-1)
-        title = response.json()['articles'][number]['description']
+        title = response.json()['articles'][number]['title']
+        description = response.json()['articles'][number]['description']
         if re.search(r'(\.\.\.|…)', title) is not None:
             title = re.sub(r'\..*', '.', title)
         if re.match('^$', title) is not None:
-            title = response.json()['articles'][number]['title']
+            title = ''
+        if re.match('^$', description) is not None:
+            description = ''
         link = response.json()['articles'][number]['url']
 
-        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '\n\n\n Хочешь ещё новость? Выбери категорию!'
+        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '\n\n' + description + '\n\n\n Хочешь ещё новость? Выбери категорию!'
         res['response']['buttons'] = [{"title": "Подробнее", "url": link}]
         return
 
