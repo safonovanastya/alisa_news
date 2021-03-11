@@ -85,10 +85,14 @@ def handle_dialog(req, res):
         number = randint(0, len(response.json()['articles'])-1)
         title = response.json()['articles'][number]['title']
         description = response.json()['articles'][number]['description']
+        author = response.json()['articles'][number]['author']
         if re.search(r'(\.\.\.|…)', description) is not None:
             description = re.sub(r'\..*', '.', description)
         if re.match('^$', title) is not None:
             title = ''
+        else:
+            title_split = title.split('-', title)
+            title = '-'.join(title_split[:-1])
         if re.match('^$', description) is not None:
             description = ''
         link = response.json()['articles'][number]['url']
