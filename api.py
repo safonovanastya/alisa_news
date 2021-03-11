@@ -72,34 +72,38 @@ def handle_dialog(req, res):
         return
 
     # Обрабатываем ответ пользователя.
-    if req['request']['original_utterance'].lower() in [
-        'спорт',
-        'бизнес',
-        'технологии',
-        'здоровье',
-        'наука',
-    ]:
-        q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
-        url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
-        response = requests.get(url)
-        number = randint(0, len(response.json()['articles'])-1)
-        title = response.json()['articles'][number]['title']
-        description = response.json()['articles'][number]['description']
-        if re.search(r'(\.\.\.|…)', description) is not None:
-            description = re.sub(r'\..*', '.', description)
-        if re.match('^$', title) is not None:
-            title = description
-        else:
-            title_split = title.split(' - ')
-            title = ' - '.join(title_split[:-1])
-        link = response.json()['articles'][number]['url']
+    try:
+        if req['request']['original_utterance'].lower() in [
+            'спорт',
+            'бизнес',
+            'технологии',
+            'здоровье',
+            'наука',
+        ]:
+            q = {'бизнес':'business', 'наука':'science', 'здоровье':'health', 'спорт':'sports', 'технологии':'technology'}
+            url = "http://newsapi.org/v2/top-headlines?country=ru&category=" + q[req['request']['original_utterance'].lower()] + "&apiKey=c789ea7ca37b4600af9bd31acb9257b8"
+            response = requests.get(url)
+            number = randint(0, len(response.json()['articles'])-1)
+            title = response.json()['articles'][number]['title']
+            description = response.json()['articles'][number]['description']
+            if re.match('^$', title) is not None:
+                if re.search(r'(\.\.\.|…)', description) is not None:
+                    description = re.sub(r'\..*', '.', description)
+                title = description
+            else:
+                title_split = title.split(' - ')
+                title = ' - '.join(title_split[:-1])
+            link = response.json()['articles'][number]['url']
 
-        res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n\n\n' + title + '.\n\n\n\n\n Хочешь ещё новость? Выбери категорию!'
-        res['response']['buttons'] = [{"title": "Подробнее", "url": link}]
-        return
+            res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '.\n\n\n Хочешь ещё новость? Выбери категорию!'
+            res['response']['buttons'] = [{"title": "Подробнее", "url": link}]
+            return
 
-    res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?'
-    res['response']['buttons'] = get_suggests(user_id)
+        res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?'
+        res['response']['buttons'] = get_suggests(user_id)
+    except:
+        res['response']['text'] = 'Кажется, что-то пошло не так. Попробуй ещё раз! Выбери: спорт, здоровье, технологии, бизнес или наука?'
+        res['response']['buttons'] = get_suggests(user_id)
 
 # Функция возвращает две подсказки для ответа.
 def get_suggests(user_id):
