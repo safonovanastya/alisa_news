@@ -91,7 +91,7 @@ def handle_dialog(req, res):
         if re.match('^$', title) is not None:
             title = ''
         else:
-            title_split = title.split('-', title)
+            title_split = title.split('-')
             title = '-'.join(title_split[:-1])
         if re.match('^$', description) is not None:
             description = ''
