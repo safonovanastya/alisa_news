@@ -60,19 +60,22 @@ def handle_dialog(req, res):
     if req['session']['new']:
         # Это новый пользователь.
         # Инициализируем сессию и поприветствуем его.
-        res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость! Если новость заинтересует - жми "подробнее"'
-        res['response']['buttons'] = get_suggests(user_id)
-        return
-
-    if req['request']['original_utterance'].lower() in ['помощь', 'что ты умеешь', 'что ты можешь', 'что ты умеешь?', 'что ты можешь?']:
-        # Это новый пользователь.
-        # Инициализируем сессию и поприветствуем его.
-        res['response']['text'] = 'Я расскажу тебе свежую новость, нужно только выбрать одну из категорий: спорт, наука, бизнес, технологии, здоровье'
+        res['response']['text'] = 'Привет! Выбирай одну из категорий (спорт, технологии, здоровье, наука, бизнес), а я тебе расскажу свежую новость! Если новость заинтересует - могу рассказать подробнее!'
         res['response']['buttons'] = get_suggests(user_id)
         return
 
     # Обрабатываем ответ пользователя.
     try:
+        if req['request']['original_utterance'].lower() in ['помощь', 'что ты умеешь', 'что ты можешь', 'что ты умеешь?', 'что ты можешь?', 'кто ты', 'зачем ты нужен', 'зачем тебя создали']:
+            res['response']['text'] = 'Я расскажу тебе свежую новость, нужно только выбрать одну из категорий: спорт, наука, бизнес, технологии, здоровье'
+            res['response']['buttons'] = get_suggests(user_id)
+            return
+
+        if req['request']['original_utterance'].lower() in ['да', 'хочу', 'конечно', 'ага', 'валяй', 'рассказывай', 'слушаю', 'очень', 'весь внимание']:
+            res['response']['text'] = 'Выбери одну из категорий: спорт, наука, бизнес, технологии, здоровье'
+            res['response']['buttons'] = get_suggests(user_id)
+            return
+
         if req['request']['original_utterance'].lower() in [
             'спорт',
             'бизнес',
@@ -93,10 +96,9 @@ def handle_dialog(req, res):
             else:
                 title_split = title.split(' - ')
                 title = ' - '.join(title_split[:-1])
-            link = response.json()['articles'][number]['url']
 
             res['response']['text'] = 'Вот такая есть новость из категории ' + req['request']['original_utterance'].lower() + ':\n\n' + title + '.\n\n\n Хочешь ещё новость? Выбери категорию!'
-            res['response']['buttons'] = [{"title": "Подробнее", "url": link}]
+            res['response']['buttons'] = get_suggests(user_id)
             return
 
         res['response']['text'] = 'Такой категории я не знаю! Выбери: спорт, здоровье, технологии, бизнес или наука?'
